@@ -8,6 +8,7 @@ from pdfminer.pdfinterp import PDFPageInterpreter, PDFResourceManager
 from pdfminer.layout import LAParams
 from pdfminer.pdfpage import PDFPage
 from spacy.matcher import Matcher
+from nltk.corpus import stopwords
 
 nlp = spacy.load('en_core_web_sm')
 
