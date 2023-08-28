@@ -2,6 +2,7 @@ import os
 from flask import Flask, render_template, request, redirect
 from werkzeug.utils import secure_filename
 import pickle
+import resume
 
 app = Flask(__name__)
 
@@ -24,6 +25,8 @@ extract_email = serialized_functions[1]
 extract_mobile_number = serialized_functions[2]
 extract_name = serialized_functions[3]
 extract_skills = serialized_functions[4]
+extract_text_from_pdf = serialized_functions[5]
+extract_text_from_docx = serialized_functions[6]
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
