@@ -1,5 +1,5 @@
 click
-Flask==2.2.2
+Flask
 gunicorn==20.1.0
 importlib-metadata==5.0.0
 itsdangerous==2.1.2
