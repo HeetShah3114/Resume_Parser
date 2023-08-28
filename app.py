@@ -1,16 +1,7 @@
 import os
-import spacy
 from flask import Flask, render_template, request, redirect
 from werkzeug.utils import secure_filename
-from resume import extract_education
-from resume import extract_email
-from resume import extract_mobile_number
-from resume import extract_name
-from resume import extract_skills
-from resume import extract_text_from_docx
-from resume import extract_text_from_pdf
-
-nlp = spacy.load('en_core_web_sm')
+import pickle
 
 app = Flask(__name__)
 
@@ -23,9 +14,17 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-# Rest of your extraction functions
+# Load the serialized functions
+with open('serialized_functions.pkl', 'rb') as f:
+    serialized_functions = pickle.load(f)
 
-# Rest of your routes and logic
+# Assign the loaded functions to variables
+extract_education = serialized_functions[0]
+extract_email = serialized_functions[1]
+extract_mobile_number = serialized_functions[2]
+extract_name = serialized_functions[3]
+extract_skills = serialized_functions[4]
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
@@ -47,7 +46,7 @@ def index():
             else:
                 return "Unsupported file format."
             
-            # Extract information using your functions
+            # Extract information using the serialized functions
             name = extract_name(text)
             mobile_number = extract_mobile_number(text)
             email = extract_email(text)
