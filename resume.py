@@ -1,5 +1,7 @@
+import zipfile
 import re
 import io
+import os
 import pandas as pd
 import docx2txt
 import spacy
@@ -11,6 +13,14 @@ from spacy.matcher import Matcher
 from nltk.corpus import stopwords
 
 nlp = spacy.load('en_core_web_sm')
+
+nltk_data_path = os.environ.get('NLTK_DATA')
+nltk_stopwords = stopwords.words('english')
+
+# Unzip the NLTK data if it's a zip file
+if nltk_data_path.endswith('.zip'):
+    with zipfile.ZipFile(nltk_data_path, 'r') as zip_ref:
+        zip_ref.extractall(nltk_data_path.replace('.zip', ''))
 
 def extract_text_from_pdf(pdf_path):
     with open(pdf_path, 'rb') as fh:
@@ -57,7 +67,7 @@ def extract_email(email):
 
 def extract_skills(resume_text):
     nlp_text = nlp(resume_text)
-    tokens = [token.text for token in nlp_text if not token.is_stop]
+    tokens = [token.text for token in nlp_text if not token.is_stop and token.text.lower() not in nltk_stopwords]
     data = pd.read_csv("skills.csv")
     skills = list(data.columns.values)
     skillset = []
@@ -70,28 +80,17 @@ def extract_skills(resume_text):
             skillset.append(token)
     return [i.capitalize() for i in set([i.lower() for i in skillset])]
 
-# Education Degrees
-EDUCATION = [
-            'BE','B.E.', 'B.E', 'BS', 'B.S','C.A.','c.a.','B.Com','B. Com','M. Com', 'M.Com','M. Com .',
-            'ME', 'M.E', 'M.E.', 'MS', 'M.S',
-            'BTECH', 'B.TECH', 'M.TECH', 'MTECH',
-            'PHD', 'phd', 'ph.d', 'Ph.D.','MBA','mba','graduate', 'post-graduate','5 year integrated masters','masters',
-            'SSC', 'HSC', 'CBSE', 'ICSE', 'X', 'XII'
-        ]
+# ... (rest of the code)
 
-def extract_education(resume_text):
-    nlp_text = nlp(resume_text)
-    # Sentence Tokenizer
-    nlp_text = [sent.text.strip() for sent in nlp_text.sents]
-    edu = {}
-    # Extract education degree
-    for index, text in enumerate(nlp_text):
-        for tex in text.split():
-            # Replace all special symbols
-            tex = re.sub(r'[?|$|.|!|,]', r'', tex)
-            if tex.upper() in EDUCATION and tex not in STOPWORDS:
-                edu[tex] = text + nlp_text[index + 1]
-                return list(edu.keys())
+# Calling other functions using the extracted text
+name = extract_name(text)
+mobile_number = extract_mobile_number(text)
+email = extract_email(text)
+skills = extract_skills(text)
+education = extract_education(text)
+
+print("Name: {}\nMobile Number: {}\nEmail: {}\nSkills: {}\nEducation: {}".format(name, mobile_number, email, skills, education))
+
 
 # Load pre-trained model
 matcher = Matcher(nlp.vocab)
