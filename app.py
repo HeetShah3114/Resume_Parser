@@ -15,7 +15,7 @@ nlp = spacy.load('en_core_web_sm')
 app = Flask(__name__)
 
 # Configure the upload folder
-UPLOAD_FOLDER = /upload_files/
+UPLOAD_FOLDER = upload_files/
 ALLOWED_EXTENSIONS = {'pdf', 'docx'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
