@@ -135,3 +135,6 @@ functions_to_serialize = [
 
 with open('serialized_functions.pkl', 'wb') as f:
     pickle.dump(functions_to_serialize, f)
+
+with open('stopwords.pkl', 'wb') as f:
+    pickle.dump(STOPWORDS, f)
