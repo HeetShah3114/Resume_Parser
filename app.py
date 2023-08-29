@@ -19,6 +19,9 @@ def allowed_file(filename):
 with open('serialized_functions.pkl', 'rb') as f:
     serialized_functions = pickle.load(f)
 
+with open('stopwords.pkl', 'rb') as f:
+    STOPWORDS = pickle.load(f)
+
 # Assign the loaded functions to variables
 extract_education = serialized_functions[0]
 extract_email = serialized_functions[1]
