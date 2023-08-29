@@ -15,7 +15,7 @@ nlp = spacy.load('en_core_web_sm')
 app = Flask(__name__)
 
 # Configure the upload folder
-UPLOAD_FOLDER = templates/UPLOAD_FOLDER
+UPLOAD_FOLDER = https://github.com/HeetShah3114/Resume_Parser/tree/6cb93acbe4fda4946c0c2d0aca75cdbd8a041ba1/templates/UPLOAD_FOLDER
 ALLOWED_EXTENSIONS = {'pdf', 'docx'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
